@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <title>米子空港 コンシェルジュマップ</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css" />  
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="style.css" />
-    <script src="map_data_TJH.js"></script>
+    <script src="map_data_YGJ.js"></script> </head>
 </head>
 <body>
 
@@ -28,7 +28,7 @@
 
         // 空港用検索リンク
         var iKanko = `https://www.google.com/maps/search/観光/@${YGJ_LAT},${YGJ_LNG},15z`;
-        var iOmiya = `https://www.google.com/maps/search/お土産/@${YGJ_LAT},${YGJ_LNG},15z`;
+        var iOmiya = `https://www.google.com/maps/search/土産/@${YGJ_LAT},${YGJ_LNG},15z`;
         var iGourmet = `https://www.google.com/maps/search/食事/@${YGJ_LAT},${YGJ_LNG},15z`;
 
         L.marker([YGJ_LAT, YGJ_LNG], {icon: airportIcon})
@@ -39,7 +39,7 @@
                     <div class="search-label">📍 空港周辺を検索：</div>
                     <div class="search-group">
                         <a href="${iKanko}" target="_blank" class="btn btn-orange btn-sm">📷 観光</a>
-                        <a href="${iOmiya}" target="_blank" class="btn btn-orange btn-sm">🎁 お土産</a>
+                        <a href="${iOmiya}" target="_blank" class="btn btn-orange btn-sm">🎁 土産</a>
                         <a href="${iGourmet}" target="_blank" class="btn btn-orange btn-sm">🍴 食事</a>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                 var routeEditUrl = `https://www.google.com/maps/dir/?api=1&destination=${assoc.Latitude},${assoc.Longitude}`;
                 
                 var sKanko = `https://www.google.com/maps/search/観光/@${assoc.Latitude},${assoc.Longitude},15z`;
-                var sOmiya = `https://www.google.com/maps/search/お土産/@${assoc.Latitude},${assoc.Longitude},15z`;
+                var sOmiya = `https://www.google.com/maps/search/土産/@${assoc.Latitude},${assoc.Longitude},15z`;
                 var sGourmet = `https://www.google.com/maps/search/食事/@${assoc.Latitude},${assoc.Longitude},15z`;
 
                 L.marker([assoc.Latitude, assoc.Longitude], {icon: pinIcon})
@@ -81,7 +81,7 @@
                             <div class="search-label">📍 周辺を検索：</div>
                             <div class="search-group">
                                 <a id="GSK${kid}" href="${sKanko}" target="_blank" class="btn btn-orange btn-sm">📷 観光</a>
-                                <a id="GSO${kid}" href="${sOmiya}" target="_blank" class="btn btn-orange btn-sm">🎁 お土産</a>
+                                <a id="GSO${kid}" href="${sOmiya}" target="_blank" class="btn btn-orange btn-sm">🎁 土産</a>
                                 <a id="GSG${kid}" href="${sGourmet}" target="_blank" class="btn btn-orange btn-sm">🍴 食事</a>
                             </div>
                         </div>
@@ -103,7 +103,7 @@
                 var routeEditUrl = `https://www.google.com/maps/dir/?api=1&destination=${spot.Latitude},${spot.Longitude}`;
                 
                 var sKanko = `https://www.google.com/maps/search/観光/@${spot.Latitude},${spot.Longitude},15z`;
-                var sOmiya = `https://www.google.com/maps/search/お土産/@${spot.Latitude},${spot.Longitude},15z`;
+                var sOmiya = `https://www.google.com/maps/search/土産/@${spot.Latitude},${spot.Longitude},15z`;
                 var sGourmet = `https://www.google.com/maps/search/食事/@${spot.Latitude},${spot.Longitude},15z`;
                 
                 L.marker([spot.Latitude, spot.Longitude], { icon: spotIcon })
@@ -117,7 +117,7 @@
                             <div class="search-label">📍 周辺を検索：</div>
                             <div class="search-group">
                                 <a id="GSK${sid}" href="${sKanko}" target="_blank" class="btn btn-orange btn-sm">📷 観光</a>
-                                <a id="GSO${sid}" href="${sOmiya}" target="_blank" class="btn btn-orange btn-sm">🎁 お土産</a>
+                                <a id="GSO${sid}" href="${sOmiya}" target="_blank" class="btn btn-orange btn-sm">🎁 土産</a>
                                 <a id="GSD${sid}" href="${sGourmet}" target="_blank" class="btn btn-orange btn-sm">🍴 食事</a>
                             </div>
                         </div>
