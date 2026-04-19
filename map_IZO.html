@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>出雲空港 コンシェルジュマップ</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -51,25 +51,26 @@
 
     /* --- スマホ最適化のための追加設定 --- */
         @media screen and (max-width: 600px) {
-            /* ポップアップ全体を画面幅に合わせる */
-            .leaflet-popup-content-wrapper {
-                padding: 5px;
-            }
-            .popup-card {
-                width: 80vw !important; /* 画面幅の80%に設定 */
-            }
-            .popup-title {
-                font-size: 18px !important; /* タイトルを見やすく拡大 */
-            }
-            .info-row {
-                font-size: 16px !important; /* テキストサイズを拡大 */
-                padding: 4px 0;
-            }
-            .btn {
-                font-size: 16px !important; /* ボタンを押しやすく拡大 */
-                padding: 12px 0;
-            }
+        /* ポップアップ全体が画面からはみ出さないようにガード */
+        .leaflet-popup {
+            max-width: 95vw !important;
         }
+        /* 中身のカード幅を親要素に合わせる */
+        .popup-card {
+            width: 100% !important;
+            box-sizing: border-box; /* パディングを幅計算に含める */
+        }
+        .popup-title {
+            font-size: 18px !important;
+        }
+        .info-row {
+            font-size: 16px !important;
+        }
+        .btn {
+            font-size: 16px !important;
+            padding: 12px 0;
+        }
+    }
 
     </style>
 </head>
