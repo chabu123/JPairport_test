@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>鳥取空港 コンシェルジュマップ</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="map_data_TTJ.js"></script>
+    
+    <style>
+        body { margin: 0; padding: 0; font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; }
+        #map { height: 100vh; width: 100%; background: #f0f2f5; }
+        .custom-div-icon { background: none !important; border: none !important; }
+
+        /* 空港ピン */
+        .airport-pin { position: relative; width: 40px; height: 40px; }
+        .airport-pin-svg { fill: #e74c3c; stroke: #fff; stroke-width: 2; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3)); }
+        .airport-icon-inner { position: absolute; top: 8px; left: 0; width: 40px; text-align: center; color: white; font-weight: bold; font-size: 16px; pointer-events: none; }
+
+        /* 観光協会ピン */
+        .assoc-pin { position: relative; width: 28px; height: 38px; }
+        .pin-svg-blue { fill: #3498db; stroke: #fff; stroke-width: 2; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3)); }
+        .pin-svg-gray { fill: #95a5a6; stroke: #fff; stroke-width: 2; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2)); }
+        .pin-number { position: absolute; top: 6px; left: 0; width: 28px; text-align: center; color: white; font-weight: 800; font-size: 10px; pointer-events: none; }
+
+        /* 個別スポットピン */
+        .spot-pin-wrap { position: relative; width: 24px; height: 32px; }
+        .spot-pin-svg { fill: #2ecc71; stroke: #fff; stroke-width: 1.5; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3)); }
+        .spot-icon-inner { position: absolute; top: 5px; left: 0; width: 24px; text-align: center; font-size: 10px; pointer-events: none; }
+
+        .custom-tooltip { background: rgba(44, 62, 80, 0.95) !important; color: #fff !important; border: 1px solid #fff !important; border-radius: 6px !important; padding: 6px 10px !important; font-weight: bold !important; font-size: 13px !important; box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important; white-space: nowrap; }
+
+        .popup-card { width: 250px; }
+        .popup-title { font-size: 16px; font-weight: bold; padding-bottom: 5px; margin-bottom: 10px; display: block; text-decoration: underline; }
+        .popup-title-assoc { color: #0056b3; border-bottom: 2px solid #3498db; }
+        .popup-title-spot { color: #219150; border-bottom: 2px solid #2ecc71; }
+        .popup-title-airport { color: #c0392b; border-bottom: 2px solid #e74c3c; }
+        
+        .info-row { display: flex; align-items: center; margin-bottom: 8px; font-size: 13px; text-decoration: none; }
+        .info-icon { margin-right: 8px; font-size: 16px; }
+
+        .btn { display: block; width: 100%; padding: 10px 0; margin-top: 8px; border-radius: 8px; text-align: center; color: white; font-weight: bold; text-decoration: none; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .btn-red { background-color: #f28d85; }
+        .btn-blue { background-color: #85c1e9; }
+        .btn-orange { background-color: #f8c471; color: #784212; }
+
+        .search-label { margin-top:12px; font-size:11px; font-weight:bold; color:#666; }
+        .search-group { display: flex; justify-content: space-between; gap: 4px; margin-top: 5px; }
+        .btn-sm { flex: 1; padding: 7px 0; font-size: 11px; margin-top: 0; }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <script>
+        const TTJ_LAT = 35.5330, TTJ_LNG = 134.1645;
+        const TTJ_URL = "https://www.ttj-ap-bld.co.jp/";
+        
+        var map = L.map('map').setView([TTJ_LAT, TTJ_LNG], 9);
+        L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', { attribution: "地理院タイル" }).addTo(map);
+
+        var airportIcon = L.divIcon({
+            className: 'custom-div-icon',
+            html: `<div class="airport-pin"><svg viewBox="0 0 30 42" class="airport-pin-svg"><path d="M15 0C6.7 0 0 6.7 0 15c0 10.5 15 27 15 27s15-16.5 15-27c0-8.3-6.7-15-15-15z"/></svg><div class="airport-icon-inner">✈️</div></div>`,
+            iconSize: [28, 38], iconAnchor: [14, 38]
+        });
+
+        // 正しいGoogleマップ検索URL：https://www.google.com/maps/search/検索ワード/@緯度,経度,15z
+        var iKanko = `https://www.google.com/maps/search/観光/@${TTJ_LAT},${TTJ_LNG},15z`;
+        var iOmiya = `https://www.google.com/maps/search/お土産/@${TTJ_LAT},${TTJ_LNG},15z`;
+        var iGourmet = `https://www.google.com/maps/search/食事/@${TTJ_LAT},${TTJ_LNG},15z`;
+
+        L.marker([TTJ_LAT, TTJ_LNG], {icon: airportIcon})
+            .addTo(map)
+            .bindPopup(`
+                <div class="popup-card">
+                    <a href="${TTJ_URL}" target="_blank" class="popup-title popup-title-airport">鳥取空港 公式サイト 🔗</a>
+                    <div class="search-label">📍 空港周辺を検索：</div>
+                    <div class="search-group">
+                        <a href="${iKanko}" target="_blank" class="btn btn-orange btn-sm">📷 観光</a>
+                        <a href="${iOmiya}" target="_blank" class="btn btn-orange btn-sm">🎁 お土産</a>
+                        <a href="${iGourmet}" target="_blank" class="btn btn-orange btn-sm">🍴 食事</a>
+                    </div>
+                </div>
+            `);
+
+        var spotLayer = L.layerGroup(); 
+
+        if (typeof airport_data !== 'undefined') {
+            airport_data.associations.forEach(function(assoc) {
+                const kid = assoc.K_ID;
+                const sSearch = assoc.Search_name || assoc.K_name;
+                
+                var pinIcon = L.divIcon({
+                    className: 'custom-div-icon',
+                    html: `<div class="assoc-pin"><svg viewBox="0 0 30 42" class="${(assoc.spot_count > 0) ? "pin-svg-blue" : "pin-svg-gray"}"><path d="M15 0C6.7 0 0 6.7 0 15c0 10.5 15 27 15 27s15-16.5 15-27c0-8.3-6.7-15-15-15z"/></svg><div class="pin-number">${assoc.spot_count}</div></div>`,
+                    iconSize: [28, 38], iconAnchor: [14, 38]
+                });
+
+                var weatherUrl = `https://www.google.com/search?q=${encodeURIComponent(sSearch)}+天気`;
+                var japan47Url = `https://www.japan47go.travel/ja/search/result?place=${encodeURIComponent(sSearch)}`;
+                
+                var routeToUrl = `https://www.google.com/maps/dir/?api=1&origin=${TTJ_LAT},${TTJ_LNG}&destination=${assoc.Latitude},${assoc.Longitude}`;
+                var routeEditUrl = `https://www.google.com/maps/dir/?api=1&destination=${assoc.Latitude},${assoc.Longitude}`;
+                
+                var sKanko = `https://www.google.com/maps/search/観光/@${assoc.Latitude},${assoc.Longitude},15z`;
+                var sOmiya = `https://www.google.com/maps/search/お土産/@${assoc.Latitude},${assoc.Longitude},15z`;
+                var sGourmet = `https://www.google.com/maps/search/食事/@${assoc.Latitude},${assoc.Longitude},15z`;
+
+                L.marker([assoc.Latitude, assoc.Longitude], {icon: pinIcon})
+                    .addTo(map)
+                    .bindTooltip(assoc.K_name, { className: 'custom-tooltip', direction: 'top', offset: [0, -35] })
+                    .bindPopup(`
+                        <div class="popup-card">
+                            <a id="${kid}" href="${assoc.URL}" target="_blank" class="popup-title popup-title-assoc">${assoc.K_name} 🔗</a>
+                            <a id="W${kid}" href="${weatherUrl}" target="_blank" class="info-row" style="color:#ed9121;"><span class="info-icon">🌦</span> <b>グラフで見る天気予報 📊</b></a>
+                            <a id="L${kid}" href="${japan47Url}" target="_blank" class="info-row" style="color:#007bff;"><span class="info-icon">🔍</span> 観光情報 (Japan47GO)</a>
+                            <a id="GA${kid}" href="${routeToUrl}" target="_blank" class="btn btn-red">🏎 鳥取空港から行く</a>
+                            <a id="GP${kid}" href="${routeEditUrl}" target="_blank" class="btn btn-blue">🗺 出発地を変更して計画</a>
+                            <div class="search-label">📍 周辺を検索：</div>
+                            <div class="search-group">
+                                <a id="GSK${kid}" href="${sKanko}" target="_blank" class="btn btn-orange btn-sm">📷 観光</a>
+                                <a id="GSO${kid}" href="${sOmiya}" target="_blank" class="btn btn-orange btn-sm">🎁 お土産</a>
+                                <a id="GSG${kid}" href="${sGourmet}" target="_blank" class="btn btn-orange btn-sm">🍴 食事</a>
+                            </div>
+                        </div>
+                    `);
+            });
+
+            airport_data.spots.forEach(function(spot) {
+                const sid = spot.Spot_ID;
+                const dispName = spot.Spot_name || spot.Name || "観光スポット";
+                
+                var spotIcon = L.divIcon({
+                    className: 'custom-div-icon',
+                    html: `<div class="spot-pin-wrap"><svg viewBox="0 0 30 42" class="spot-pin-svg"><path d="M15 0C6.7 0 0 6.7 0 15c0 10.5 15 27 15 27s15-16.5 15-27c0-8.3-6.7-15-15-15z"/></svg><div class="spot-icon-inner">📸</div></div>`,
+                    iconSize: [24, 32], iconAnchor: [12, 32]
+                });
+
+                var weatherUrl = `https://www.google.com/search?q=${encodeURIComponent(dispName)}+天気`;
+                var routeToUrl = `https://www.google.com/maps/dir/?api=1&origin=${TTJ_LAT},${TTJ_LNG}&destination=${spot.Latitude},${spot.Longitude}`;
+                var routeEditUrl = `https://www.google.com/maps/dir/?api=1&destination=${spot.Latitude},${spot.Longitude}`;
+                
+                var sKanko = `https://www.google.com/maps/search/観光/@${spot.Latitude},${spot.Longitude},15z`;
+                var sOmiya = `https://www.google.com/maps/search/お土産/@${spot.Latitude},${spot.Longitude},15z`;
+                var sGourmet = `https://www.google.com/maps/search/食事/@${spot.Latitude},${spot.Longitude},15z`;
+                
+                L.marker([spot.Latitude, spot.Longitude], { icon: spotIcon })
+                    .bindTooltip(dispName, { className: 'custom-tooltip', direction: 'top', offset: [0, -25] })
+                    .bindPopup(`
+                        <div class="popup-card">
+                            <a id="${sid}" href="${spot.URL}" target="_blank" class="popup-title popup-title-spot">${dispName} 🔗</a>
+                            <a id="W${sid}" href="${weatherUrl}" target="_blank" class="info-row" style="color:#ed9121;"><span class="info-icon">🌦</span> <b>グラフで見る天気予報 📊</b></a>
+                            <a id="GA${sid}" href="${routeToUrl}" target="_blank" class="btn btn-red">🏎 鳥取空港から行く</a>
+                            <a id="GP${sid}" href="${routeEditUrl}" target="_blank" class="btn btn-blue">🗺 出発地を変更して計画</a>
+                            <div class="search-label">📍 周辺を検索：</div>
+                            <div class="search-group">
+                                <a id="GSK${sid}" href="${sKanko}" target="_blank" class="btn btn-orange btn-sm">📷 観光</a>
+                                <a id="GSO${sid}" href="${sOmiya}" target="_blank" class="btn btn-orange btn-sm">🎁 お土産</a>
+                                <a id="GSD${sid}" href="${sGourmet}" target="_blank" class="btn btn-orange btn-sm">🍴 食事</a>
+                            </div>
+                        </div>
+                    `).addTo(spotLayer);
+            });
+        }
+
+        function updateLayers() {
+            if (map.getZoom() >= 11) { if (!map.hasLayer(spotLayer)) map.addLayer(spotLayer); }
+            else { if (map.hasLayer(spotLayer)) map.removeLayer(spotLayer); }
+        }
+        map.on('zoomend', updateLayers);
+        updateLayers();
+    </script>
+</body>
+</html>
