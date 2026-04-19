@@ -1,53 +1,13 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>米子空港 コンシェルジュマップ</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="map_data_YGJ.js"></script>
-    
-    <style>
-        body { margin: 0; padding: 0; font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; }
-        #map { height: 100vh; width: 100%; background: #f0f2f5; }
-        .custom-div-icon { background: none !important; border: none !important; }
-
-        /* 空港ピン */
-        .airport-pin { position: relative; width: 40px; height: 40px; }
-        .airport-pin-svg { fill: #e74c3c; stroke: #fff; stroke-width: 2; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3)); }
-        .airport-icon-inner { position: absolute; top: 8px; left: 0; width: 40px; text-align: center; color: white; font-weight: bold; font-size: 16px; pointer-events: none; }
-
-        /* 観光協会ピン */
-        .assoc-pin { position: relative; width: 28px; height: 38px; }
-        .pin-svg-blue { fill: #3498db; stroke: #fff; stroke-width: 2; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3)); }
-        .pin-svg-gray { fill: #95a5a6; stroke: #fff; stroke-width: 2; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2)); }
-        .pin-number { position: absolute; top: 6px; left: 0; width: 28px; text-align: center; color: white; font-weight: 800; font-size: 10px; pointer-events: none; }
-
-        /* 個別スポットピン */
-        .spot-pin-wrap { position: relative; width: 24px; height: 32px; }
-        .spot-pin-svg { fill: #2ecc71; stroke: #fff; stroke-width: 1.5; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3)); }
-        .spot-icon-inner { position: absolute; top: 5px; left: 0; width: 24px; text-align: center; font-size: 10px; pointer-events: none; }
-
-        .custom-tooltip { background: rgba(44, 62, 80, 0.95) !important; color: #fff !important; border: 1px solid #fff !important; border-radius: 6px !important; padding: 6px 10px !important; font-weight: bold !important; font-size: 13px !important; box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important; white-space: nowrap; }
-
-        .popup-card { width: 250px; }
-        .popup-title { font-size: 16px; font-weight: bold; padding-bottom: 5px; margin-bottom: 10px; display: block; text-decoration: underline; }
-        .popup-title-assoc { color: #0056b3; border-bottom: 2px solid #3498db; }
-        .popup-title-spot { color: #219150; border-bottom: 2px solid #2ecc71; }
-        .popup-title-airport { color: #c0392b; border-bottom: 2px solid #e74c3c; }
-        
-        .info-row { display: flex; align-items: center; margin-bottom: 8px; font-size: 13px; text-decoration: none; }
-        .info-icon { margin-right: 8px; font-size: 16px; }
-
-        .btn { display: block; width: 100%; padding: 10px 0; margin-top: 8px; border-radius: 8px; text-align: center; color: white; font-weight: bold; text-decoration: none; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .btn-red { background-color: #f28d85; }
-        .btn-blue { background-color: #85c1e9; }
-        .btn-orange { background-color: #f8c471; color: #784212; }
-
-        .search-label { margin-top:12px; font-size:11px; font-weight:bold; color:#666; }
-        .search-group { display: flex; justify-content: space-between; gap: 4px; margin-top: 5px; }
-        .btn-sm { flex: 1; padding: 7px 0; font-size: 11px; margin-top: 0; }
-    </style>
+    <link rel="stylesheet" href="style.css" />
+    <script src="map_data_TJH.js"></script>
 </head>
 <body>
 
