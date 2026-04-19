@@ -93,7 +93,7 @@
 
         // 空港用検索リンク（正しいURL構造）
         var iKanko = `https://www.google.com/maps/search/観光/@${IZO_LAT},${IZO_LNG},15z`;
-        var iOmiya = `https://www.google.com/maps/search/お土産/@${IZO_LAT},${IZO_LNG},15z`;
+        var iOmiya = `https://www.google.com/maps/search/土産/@${IZO_LAT},${IZO_LNG},15z`;
         var iGourmet = `https://www.google.com/maps/search/食事/@${IZO_LAT},${IZO_LNG},15z`;
 
         L.marker([IZO_LAT, IZO_LNG], {icon: airportIcon})
@@ -104,7 +104,7 @@
                     <div class="search-label">📍 空港周辺を検索：</div>
                     <div class="search-group">
                         <a href="${iKanko}" target="_blank" class="btn btn-orange btn-sm">📷 観光</a>
-                        <a href="${iOmiya}" target="_blank" class="btn btn-orange btn-sm">🎁 お土産</a>
+                        <a href="${iOmiya}" target="_blank" class="btn btn-orange btn-sm">🎁 土産</a>
                         <a href="${iGourmet}" target="_blank" class="btn btn-orange btn-sm">🍴 食事</a>
                     </div>
                 </div>
@@ -131,7 +131,7 @@
                 var routeEditUrl = `https://www.google.com/maps/dir/?api=1&destination=${assoc.Latitude},${assoc.Longitude}`;
                 
                 var sKanko = `https://www.google.com/maps/search/観光/@${assoc.Latitude},${assoc.Longitude},15z`;
-                var sOmiya = `https://www.google.com/maps/search/お土産/@${assoc.Latitude},${assoc.Longitude},15z`;
+                var sOmiya = `https://www.google.com/maps/search/土産/@${assoc.Latitude},${assoc.Longitude},15z`;
                 var sGourmet = `https://www.google.com/maps/search/食事/@${assoc.Latitude},${assoc.Longitude},15z`;
 
                 L.marker([assoc.Latitude, assoc.Longitude], {icon: pinIcon})
@@ -147,7 +147,7 @@
                             <div class="search-label">📍 周辺を検索：</div>
                             <div class="search-group">
                                 <a id="GSK${kid}" href="${sKanko}" target="_blank" class="btn btn-orange btn-sm">📷 観光</a>
-                                <a id="GSO${kid}" href="${sOmiya}" target="_blank" class="btn btn-orange btn-sm">🎁 お土産</a>
+                                <a id="GSO${kid}" href="${sOmiya}" target="_blank" class="btn btn-orange btn-sm">🎁 土産</a>
                                 <a id="GSG${kid}" href="${sGourmet}" target="_blank" class="btn btn-orange btn-sm">🍴 食事</a>
                             </div>
                         </div>
@@ -169,7 +169,7 @@
                 var routeEditUrl = `https://www.google.com/maps/dir/?api=1&destination=${spot.Latitude},${spot.Longitude}`;
                 
                 var sKanko = `https://www.google.com/maps/search/観光/@${spot.Latitude},${spot.Longitude},15z`;
-                var sOmiya = `https://www.google.com/maps/search/お土産/@${spot.Latitude},${spot.Longitude},15z`;
+                var sOmiya = `https://www.google.com/maps/search/土産/@${spot.Latitude},${spot.Longitude},15z`;
                 var sGourmet = `https://www.google.com/maps/search/食事/@${spot.Latitude},${spot.Longitude},15z`;
                 
                 L.marker([spot.Latitude, spot.Longitude], { icon: spotIcon })
@@ -183,7 +183,7 @@
                             <div class="search-label">📍 周辺を検索：</div>
                             <div class="search-group">
                                 <a id="GSK${sid}" href="${sKanko}" target="_blank" class="btn btn-orange btn-sm">📷 観光</a>
-                                <a id="GSO${sid}" href="${sOmiya}" target="_blank" class="btn btn-orange btn-sm">🎁 お土産</a>
+                                <a id="GSO${sid}" href="${sOmiya}" target="_blank" class="btn btn-orange btn-sm">🎁 土産</a>
                                 <a id="GSD${sid}" href="${sGourmet}" target="_blank" class="btn btn-orange btn-sm">🍴 食事</a>
                             </div>
                         </div>
